@@ -32,10 +32,20 @@ void MainWindow::on_pushButtonLink_clicked()
         print<<"断开连接";
         ui->labelState->setText("未连接");
     }
-    mysqlConn_ =new Connection("test_db","localhost", "wanjun", "wanjun", 3306);
-    if(mysqlConn_ != nullptr){
-        print<<"连接成功";
-        ui->labelState->setText("已连接");
+    try{
+        mysqlConn_ = new Connection(ui->lineEditDatabase->text().toLatin1(),
+                                   ui->lineEditIP->text().toLatin1(),
+                                   ui->lineEditUser->text().toLatin1(),
+                                   ui->lineEditPassWord->text().toLatin1(),
+                                   ui->lineEditPort->text().toInt());
+        if(mysqlConn_ != nullptr){
+            print<<"连接成功";
+            ui->labelState->setText("已连接");
+        }else{
+            print<<"连接失败";
+        }
+    }catch(...){
+        print<<"连接错误";
     }
 }
 
