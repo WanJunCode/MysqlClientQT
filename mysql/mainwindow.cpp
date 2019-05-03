@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QDebug>
+#include <string.h>
 
 #define print qDebug()
 
@@ -33,7 +34,10 @@ void MainWindow::on_pushButtonLink_clicked()
         ui->labelState->setText("未连接");
     }
     try{
-        mysqlConn_ = new Connection(ui->lineEditDatabase->text().toLatin1(),
+        mysqlConn_ = new Connection();
+        SetCharsetNameOption *charset = new SetCharsetNameOption("utf8");
+        mysqlConn_->set_option(charset);
+        mysqlConn_->connect(ui->lineEditDatabase->text().toLatin1(),
                                    ui->lineEditIP->text().toLatin1(),
                                    ui->lineEditUser->text().toLatin1(),
                                    ui->lineEditPassWord->text().toLatin1(),
@@ -57,9 +61,12 @@ void MainWindow::on_pushButtonExec_clicked()
         StoreQueryResult result = query.store();
         for(auto iter=result.begin();iter!=result.end();++iter){
             Row row = *iter;
-            print<<"test"<<QString(row[0]);
+            for(int i=0;i<row.size();i++){
+                ui->plainTextEditResult->appendPlainText(QString::fromUtf8(row[i]));
+            }
         }
-        print<<result.size();
+        ui->plainTextEditResult->appendPlainText(QString::number(result.size(),10));
+
     }else{
         print<<"mysql 未连接";
     }
