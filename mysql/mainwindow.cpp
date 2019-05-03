@@ -53,7 +53,13 @@ void MainWindow::on_pushButtonExec_clicked()
 {
     if(mysqlConn_ && mysqlConn_->ping()){
         print<<"mysql 执行";
-
+        Query query = mysqlConn_->query(ui->lineEditSql->text().toLatin1());
+        StoreQueryResult result = query.store();
+        for(auto iter=result.begin();iter!=result.end();++iter){
+            Row row = *iter;
+            print<<"test"<<QString(row[0]);
+        }
+        print<<result.size();
     }else{
         print<<"mysql 未连接";
     }

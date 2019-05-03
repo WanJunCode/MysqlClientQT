@@ -114,6 +114,9 @@
       <height>41</height>
      </rect>
     </property>
+    <property name="text">
+     <string>select * from zipai;</string>
+    </property>
    </widget>
    <widget class="QPushButton" name="pushButtonExec">
     <property name="geometry">
