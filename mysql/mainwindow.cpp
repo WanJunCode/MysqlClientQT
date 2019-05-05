@@ -56,17 +56,21 @@ void MainWindow::on_pushButtonLink_clicked()
 void MainWindow::on_pushButtonExec_clicked()
 {
     if(mysqlConn_ && mysqlConn_->ping()){
+        ui->plainTextEditResult->clear();
         print<<"mysql 执行";
-        Query query = mysqlConn_->query(ui->lineEditSql->text().toLatin1());
+        std::string sql = ui->lineEditSql->text().toStdString();
+        print<<QString::fromStdString(sql);
+        Query query = mysqlConn_->query(sql);
         StoreQueryResult result = query.store();
         for(auto iter=result.begin();iter!=result.end();++iter){
             Row row = *iter;
+            QString line;
             for(int i=0;i<row.size();i++){
-                ui->plainTextEditResult->appendPlainText(QString::fromUtf8(row[i]));
+                line.append(QString::fromUtf8(row[i]));
             }
+            ui->plainTextEditResult->appendPlainText(line+"\t");
         }
-        ui->plainTextEditResult->appendPlainText(QString::number(result.size(),10));
-
+        ui->labelCount->setText(QString::number(result.size(),10));
     }else{
         print<<"mysql 未连接";
     }

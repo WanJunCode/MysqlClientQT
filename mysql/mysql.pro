@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui sql
 LIBS     += -std=c++11 -lmysqlpp -lmysqlclient
 
 
